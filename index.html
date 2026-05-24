@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetShield OS - Painel de Auditoria</title>
+    <!-- Tailwind CSS para estilização moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide para a interface -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-950 text-gray-100 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+    <header class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-3">
+            <div class="bg-emerald-600 p-2 rounded-lg text-white">
+                <i data-lucide="shield-alert" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-wide">NETSHIELD <span class="text-emerald-500 text-sm font-mono">v1.0.4</span></h1>
+                <p class="text-xs text-gray-400">Sistema Operacional de Auditoria de Redes</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 bg-gray-950 px-3 py-1.5 rounded-md border border-gray-800">
+                <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span class="text-xs font-mono text-gray-300">MODO MONITOR: ATIVO</span>
+            </div>
+            <div class="text-xs text-gray-400 font-mono hidden md:block">
+                IP: 192.168.1.105
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL (GRID) -->
+    <main class="flex-1 p-6 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- CARD 1: ESTATÍSTICAS RÁPIDAS -->
+        <section class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Redes ao Alcance</p>
+                    <h3 class="text-2xl font-bold mt-1 font-mono">14</h3>
+                </div>
+                <div class="text-blue-500 bg-blue-950/50 p-3 rounded-lg"><i data-lucide="wifi"></i></div>
+            </div>
+
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Dispositivos Conectados</p>
+                    <h3 class="text-2xl font-bold mt-1 font-mono">8</h3>
+                </div>
+                <div class="text-purple-500 bg-purple-950/50 p-3 rounded-lg"><i data-lucide="laptop"></i></div>
+            </div>
+
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Pacotes Injetados /s</p>
+                    <h3 class="text-2xl font-bold mt-1 font-mono">342</h3>
+                </div>
+                <div class="text-emerald-500 bg-emerald-950/50 p-3 rounded-lg"><i data-lucide="activity"></i></div>
+            </div>
+
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Alertas de Vulnerabilidade</p>
+                    <h3 class="text-2xl font-bold mt-1 font-mono text-amber-500">2</h3>
+                </div>
+                <div class="text-amber-500 bg-amber-950/50 p-3 rounded-lg"><i data-lucide="alert-triangle"></i></div>
+            </div>
+        </section>
+
+        <!-- CARD 2: LISTA DE REDES DETECTADAS (TABELA) -->
+        <section class="lg:col-span-2 bg-gray-900 border border-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center">
+                <h2 class="font-semibold text-lg flex items-center gap-2">
+                    <i data-lucide="radar" class="text-emerald-500 w-5 h-5"></i> Redes Sem Fio Identificadas
+                </h2>
+                <button class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium px-3 py-1.5 rounded transition flex items-center gap-1.5">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Escanear Novamente
+                </button>
+            </div>
+            <div class="overflow-x-auto flex-1">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-950 text-gray-400 text-xs uppercase tracking-wider font-mono border-b border-gray-800">
+                            <th class="py-3 px-6">SSID (Nome)</th>
+                            <th class="py-3 px-6">BSSID (Mac Address)</th>
+                            <th class="py-3 px-6">Sinal</th>
+                            <th class="py-3 px-6">Segurança</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800 text-sm font-mono">
+                        <tr class="hover:bg-gray-850 transition">
+                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Home_WiFi_2G</td>
+                            <td class="py-4 px-6 text-gray-400">00:11:22:33:44:55</td>
+                            <td class="py-4 px-6 text-emerald-400">92% <span class="text-xs text-gray-500">(Excelente)</span></td>
+                            <td class="py-4 px-6"><span class="bg-gray-800 text-gray-300 text-xs px-2 py-0.5 rounded border border-gray-700">WPA2-PSK</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-850 transition">
+                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Cafeteria_Publica</td>
+                            <td class="py-4 px-6 text-gray-400">AA:BB:CC:DD:EE:FF</td>
+                            <td class="py-4 px-6 text-emerald-500">74% <span class="text-xs text-gray-500">(Bom)</span></td>
+                            <td class="py-4 px-6"><span class="bg-emerald-950 text-emerald-400 text-xs px-2 py-0.5 rounded border border-emerald-900/50">ABERTA</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-850 transition">
+                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Corp_Secure_Net</td>
+                            <td class="py-4 px-6 text-gray-400">12:34:56:78:90:AB</td>
+                            <td class="py-4 px-6 text-amber-500 font-medium">45% <span class="text-xs text-gray-500">(Médio)</span></td>
+                            <td class="py-4 px-6"><span class="bg-purple-950 text-purple-400 text-xs px-2 py-0.5 rounded border border-purple-900/50">WPA3-Enterprise</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-850 transition">
+                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Roteador_Antigo</td>
+                            <td class="py-4 px-6 text-gray-400">FE:DC:BA:98:76:54</td>
+                            <td class="py-4 px-6 text-red-500 font-medium">18% <span class="text-xs text-gray-500">(Fraco)</span></td>
+                            <td class="py-4 px-6"><span class="bg-amber-950 text-amber-400 text-xs px-2 py-0.5 rounded border border-amber-900/50">WEP (Vulnerável)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- CARD 3: TERMINAL DE LOGS DO SISTEMA EM TEMPO REAL -->
+        <section class="bg-gray-900 border border-gray-800 rounded-xl shadow-lg flex flex-col h-[400px] lg:h-auto">
+            <div class="px-6 py-4 border-b border-gray-800 bg-gray-900/50 flex items-center justify-between">
+                <h2 class="font-semibold text-lg flex items-center gap-2">
+                    <i data-lucide="terminal" class="text-emerald-500 w-5 h-5"></i> Console do Kernel
+                </h2>
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+            </div>
+            
+            <!-- Corpo do Terminal Falso -->
+            <div class="flex-1 bg-black p-4 font-mono text-xs text-emerald-400 overflow-y-auto space-y-2">
+                <p class="text-gray-500">[10:52:01] Inicializando subsistema de rede sem fio...</p>
+                <p class="text-gray-500">[10:52:03] Interface wlan0mon colocada em modo de escuta ativa.</p>
+                <p class="text-blue-400">[10:52:15] DISPOSITIVO DETECTADO: Mac 00:11:22... associado à rede Home_WiFi_2G</p>
+                <p class="text-amber-400">[10:54:32] AVISO: Rede 'Roteador_Antigo' usa criptografia estática obsoleta (WEP).</p>
+                <p class="text-gray-300">[10:56:00] Capturando handshake de autenticação de 4 vias (WPA-Handshake)...</p>
+                <p class="text-emerald-300 animate-pulse">[10:58:25] Escaneamento cíclico concluído com sucesso. Aguardando comandos...</p>
+                <div class="flex items-center text-gray-200 pt-2">
+                    <span>root@netshield:~# </span>
+                    <span class="w-2 h-4 bg-gray-200 ml-1 animate-pulse"></span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-4 px-6 text-center text-xs text-gray-500 mt-auto font-mono">
+        Desenvolvido para fins Educacionais e de Auditoria Homologada. Proteja seus sistemas.
+    </footer>
+
+    <!-- Script para ativar os ícones do Lucide automaticamente -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
