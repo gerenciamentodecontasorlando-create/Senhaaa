@@ -3,82 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetShield OS - Painel de Auditoria</title>
-    <!-- Tailwind CSS para estilização moderna -->
+    <title>NetShield OS - Auditoria Probabilística de Senhas Wi-Fi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Ícones Lucide para a interface -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+        .terminal-log {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 <body class="bg-gray-950 text-gray-100 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
     <header class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between shadow-md">
         <div class="flex items-center space-x-3">
-            <div class="bg-emerald-600 p-2 rounded-lg text-white">
-                <i data-lucide="shield-alert" class="w-6 h-6"></i>
-            </div>
+            <div class="bg-emerald-600 p-2 rounded-lg text-white"><i data-lucide="shield-alert" class="w-6 h-6"></i></div>
             <div>
-                <h1 class="text-xl font-bold tracking-wide">NETSHIELD <span class="text-emerald-500 text-sm font-mono">v1.0.4</span></h1>
-                <p class="text-xs text-gray-400">Sistema Operacional de Auditoria de Redes</p>
+                <h1 class="text-xl font-bold tracking-wide">NETSHIELD <span class="text-emerald-500 text-sm font-mono">v2.0</span></h1>
+                <p class="text-xs text-gray-400">Geração Probabilística de Senhas para Auditoria Wireless</p>
             </div>
         </div>
-        
         <div class="flex items-center space-x-4">
             <div class="flex items-center space-x-2 bg-gray-950 px-3 py-1.5 rounded-md border border-gray-800">
                 <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
                 <span class="text-xs font-mono text-gray-300">MODO MONITOR: ATIVO</span>
             </div>
-            <div class="text-xs text-gray-400 font-mono hidden md:block">
-                IP: 192.168.1.105
-            </div>
+            <div class="text-xs text-gray-400 font-mono hidden md:block">IP: 192.168.1.105</div>
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL (GRID) -->
     <main class="flex-1 p-6 max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- CARD 1: ESTATÍSTICAS RÁPIDAS -->
-        <section class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Redes ao Alcance</p>
-                    <h3 class="text-2xl font-bold mt-1 font-mono">14</h3>
-                </div>
-                <div class="text-blue-500 bg-blue-950/50 p-3 rounded-lg"><i data-lucide="wifi"></i></div>
-            </div>
-
-            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Dispositivos Conectados</p>
-                    <h3 class="text-2xl font-bold mt-1 font-mono">8</h3>
-                </div>
-                <div class="text-purple-500 bg-purple-950/50 p-3 rounded-lg"><i data-lucide="laptop"></i></div>
-            </div>
-
-            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Pacotes Injetados /s</p>
-                    <h3 class="text-2xl font-bold mt-1 font-mono">342</h3>
-                </div>
-                <div class="text-emerald-500 bg-emerald-950/50 p-3 rounded-lg"><i data-lucide="activity"></i></div>
-            </div>
-
-            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between">
-                <div>
-                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Alertas de Vulnerabilidade</p>
-                    <h3 class="text-2xl font-bold mt-1 font-mono text-amber-500">2</h3>
-                </div>
-                <div class="text-amber-500 bg-amber-950/50 p-3 rounded-lg"><i data-lucide="alert-triangle"></i></div>
-            </div>
+        <!-- Cards estatísticos (dinâmicos) -->
+        <section class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="stats-area">
+            <!-- Preenchido via JS -->
         </section>
 
-        <!-- CARD 2: LISTA DE REDES DETECTADAS (TABELA) -->
+        <!-- Tabela de redes -->
         <section class="lg:col-span-2 bg-gray-900 border border-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col">
             <div class="px-6 py-4 border-b border-gray-800 bg-gray-900/50 flex justify-between items-center">
                 <h2 class="font-semibold text-lg flex items-center gap-2">
                     <i data-lucide="radar" class="text-emerald-500 w-5 h-5"></i> Redes Sem Fio Identificadas
                 </h2>
-                <button class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium px-3 py-1.5 rounded transition flex items-center gap-1.5">
+                <button id="scanBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium px-3 py-1.5 rounded transition flex items-center gap-1.5">
                     <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Escanear Novamente
                 </button>
             </div>
@@ -86,76 +58,292 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-950 text-gray-400 text-xs uppercase tracking-wider font-mono border-b border-gray-800">
-                            <th class="py-3 px-6">SSID (Nome)</th>
-                            <th class="py-3 px-6">BSSID (Mac Address)</th>
-                            <th class="py-3 px-6">Sinal</th>
-                            <th class="py-3 px-6">Segurança</th>
+                            <th class="py-3 px-6">SSID (Nome)</th><th class="py-3 px-6">BSSID</th><th class="py-3 px-6">Sinal</th><th class="py-3 px-6">Segurança</th><th class="py-3 px-6">Ação</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-800 text-sm font-mono">
-                        <tr class="hover:bg-gray-850 transition">
-                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Home_WiFi_2G</td>
-                            <td class="py-4 px-6 text-gray-400">00:11:22:33:44:55</td>
-                            <td class="py-4 px-6 text-emerald-400">92% <span class="text-xs text-gray-500">(Excelente)</span></td>
-                            <td class="py-4 px-6"><span class="bg-gray-800 text-gray-300 text-xs px-2 py-0.5 rounded border border-gray-700">WPA2-PSK</span></td>
-                        </tr>
-                        <tr class="hover:bg-gray-850 transition">
-                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Cafeteria_Publica</td>
-                            <td class="py-4 px-6 text-gray-400">AA:BB:CC:DD:EE:FF</td>
-                            <td class="py-4 px-6 text-emerald-500">74% <span class="text-xs text-gray-500">(Bom)</span></td>
-                            <td class="py-4 px-6"><span class="bg-emerald-950 text-emerald-400 text-xs px-2 py-0.5 rounded border border-emerald-900/50">ABERTA</span></td>
-                        </tr>
-                        <tr class="hover:bg-gray-850 transition">
-                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Corp_Secure_Net</td>
-                            <td class="py-4 px-6 text-gray-400">12:34:56:78:90:AB</td>
-                            <td class="py-4 px-6 text-amber-500 font-medium">45% <span class="text-xs text-gray-500">(Médio)</span></td>
-                            <td class="py-4 px-6"><span class="bg-purple-950 text-purple-400 text-xs px-2 py-0.5 rounded border border-purple-900/50">WPA3-Enterprise</span></td>
-                        </tr>
-                        <tr class="hover:bg-gray-850 transition">
-                            <td class="py-4 px-6 font-sans font-medium text-gray-200">Roteador_Antigo</td>
-                            <td class="py-4 px-6 text-gray-400">FE:DC:BA:98:76:54</td>
-                            <td class="py-4 px-6 text-red-500 font-medium">18% <span class="text-xs text-gray-500">(Fraco)</span></td>
-                            <td class="py-4 px-6"><span class="bg-amber-950 text-amber-400 text-xs px-2 py-0.5 rounded border border-amber-900/50">WEP (Vulnerável)</span></td>
-                        </tr>
+                    <tbody id="networksTableBody">
+                        <!-- Preenchido dinamicamente -->
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- CARD 3: TERMINAL DE LOGS DO SISTEMA EM TEMPO REAL -->
-        <section class="bg-gray-900 border border-gray-800 rounded-xl shadow-lg flex flex-col h-[400px] lg:h-auto">
-            <div class="px-6 py-4 border-b border-gray-800 bg-gray-900/50 flex items-center justify-between">
-                <h2 class="font-semibold text-lg flex items-center gap-2">
-                    <i data-lucide="terminal" class="text-emerald-500 w-5 h-5"></i> Console do Kernel
-                </h2>
-                <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+        <!-- Terminal + Gerador de Senhas -->
+        <section class="flex flex-col gap-6">
+            <!-- Terminal -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl shadow-lg flex flex-col h-[300px]">
+                <div class="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
+                    <h2 class="font-semibold text-lg flex items-center gap-2"><i data-lucide="terminal" class="text-emerald-500 w-5 h-5"></i> Console do Kernel</h2>
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                </div>
+                <div id="terminalLog" class="flex-1 bg-black p-4 font-mono text-xs text-emerald-400 overflow-y-auto space-y-1 terminal-log">
+                    <div>[10:52:01] Inicializando subsistema de rede sem fio...</div>
+                    <div>[10:52:03] Interface wlan0mon em modo monitor.</div>
+                    <div class="text-gray-400">[10:52:10] Aguardando comandos. Use "Escanear" para detectar redes.</div>
+                </div>
             </div>
-            
-            <!-- Corpo do Terminal Falso -->
-            <div class="flex-1 bg-black p-4 font-mono text-xs text-emerald-400 overflow-y-auto space-y-2">
-                <p class="text-gray-500">[10:52:01] Inicializando subsistema de rede sem fio...</p>
-                <p class="text-gray-500">[10:52:03] Interface wlan0mon colocada em modo de escuta ativa.</p>
-                <p class="text-blue-400">[10:52:15] DISPOSITIVO DETECTADO: Mac 00:11:22... associado à rede Home_WiFi_2G</p>
-                <p class="text-amber-400">[10:54:32] AVISO: Rede 'Roteador_Antigo' usa criptografia estática obsoleta (WEP).</p>
-                <p class="text-gray-300">[10:56:00] Capturando handshake de autenticação de 4 vias (WPA-Handshake)...</p>
-                <p class="text-emerald-300 animate-pulse">[10:58:25] Escaneamento cíclico concluído com sucesso. Aguardando comandos...</p>
-                <div class="flex items-center text-gray-200 pt-2">
-                    <span>root@netshield:~# </span>
-                    <span class="w-2 h-4 bg-gray-200 ml-1 animate-pulse"></span>
+
+            <!-- Painel de Geração Probabilística de Senhas -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl shadow-lg p-5">
+                <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i data-lucide="brain" class="text-purple-500 w-5 h-5"></i> Gerador Probabilístico (Markov)</h2>
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-xs text-gray-400">Rede alvo</label>
+                        <select id="targetNetworkSelect" class="w-full bg-gray-800 border border-gray-700 rounded-md p-2 text-sm font-mono">
+                            <option value="">-- Selecione uma rede --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400">Nº de senhas a gerar</label>
+                        <input type="number" id="numPasswords" value="10" min="1" max="50" class="w-full bg-gray-800 border border-gray-700 rounded-md p-2 text-sm font-mono">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400">Comprimento máximo da senha</label>
+                        <input type="number" id="maxLen" value="12" min="6" max="20" class="w-full bg-gray-800 border border-gray-700 rounded-md p-2 text-sm font-mono">
+                    </div>
+                    <button id="generatePassBtn" class="w-full bg-purple-700 hover:bg-purple-800 transition py-2 rounded-md text-sm font-bold flex items-center justify-center gap-2">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> Gerar Senhas (Markov)
+                    </button>
+                    <button id="attackBtn" class="w-full bg-red-800 hover:bg-red-900 transition py-2 rounded-md text-sm font-bold flex items-center justify-center gap-2">
+                        <i data-lucide="sword" class="w-4 h-4"></i> Testar Senhas na Rede
+                    </button>
+                </div>
+                <div id="generatedPasswordsArea" class="mt-4 p-3 bg-black rounded-md max-h-40 overflow-y-auto font-mono text-xs text-emerald-300 hidden">
+                    <p class="text-gray-400 mb-1">Senhas geradas (ordem Markov 2):</p>
+                    <ul id="generatedList" class="list-disc pl-4 space-y-1"></ul>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <!-- RODAPÉ -->
-    <footer class="bg-gray-900 border-t border-gray-800 py-4 px-6 text-center text-xs text-gray-500 mt-auto font-mono">
-        Desenvolvido para fins Educacionais e de Auditoria Homologada. Proteja seus sistemas.
+    <footer class="bg-gray-900 border-t border-gray-800 py-4 px-6 text-center text-xs text-gray-500 font-mono">
+        Trabalho acadêmico - Geração probabilística de senhas para auditoria wireless (Cadeias de Markov)
     </footer>
 
-    <!-- Script para ativar os ícones do Lucide automaticamente -->
     <script>
         lucide.createIcons();
+
+        // ----------------------------- BASE DE TREINAMENTO (senhas comuns para Wi-Fi) -----------------------------
+        const trainingPasswords = [
+            "12345678", "password", "123456789", "senha123", "wifi1234", "admin123", "123123123",
+            "qwerty123", "abcd1234", "1234567890", "senha", "wifi123", "internet", "conectado",
+            "12345", "00000000", "123456", "abcd123", "passw0rd", "admin", "123456789a", "senha123456",
+            "wlan123", "wireless", "router123", "12345678910", "senha@123", "wifi@2024"
+        ];
+        
+        // Constrói modelo de Markov de ordem 2 (probabilidades de transição)
+        function buildMarkovModel(passwords, order = 2) {
+            const transitions = new Map(); // chave: n-grama (string), valor: Map<próximo caractere, contagem>
+            for (let pwd of passwords) {
+                pwd = pwd.toLowerCase();
+                if (pwd.length < order) continue;
+                // Adiciona marcadores de início e fim: ^ e $
+                const padded = '^'.repeat(order) + pwd + '$';
+                for (let i = 0; i < padded.length - order; i++) {
+                    const state = padded.slice(i, i + order);
+                    const nextChar = padded[i + order];
+                    if (!transitions.has(state)) transitions.set(state, new Map());
+                    const nextMap = transitions.get(state);
+                    nextMap.set(nextChar, (nextMap.get(nextChar) || 0) + 1);
+                }
+            }
+            // Converte contagens em probabilidades
+            const model = new Map();
+            for (let [state, nextMap] of transitions.entries()) {
+                let total = 0;
+                for (let count of nextMap.values()) total += count;
+                const probMap = new Map();
+                for (let [ch, count] of nextMap.entries()) probMap.set(ch, count / total);
+                model.set(state, probMap);
+            }
+            return model;
+        }
+
+        const markovModel = buildMarkovModel(trainingPasswords, 2);
+
+        // Gera uma senha aleatória usando o modelo de Markov
+        function generatePasswordFromMarkov(maxLength = 12) {
+            const order = 2;
+            let state = '^'.repeat(order);
+            let result = '';
+            for (let step = 0; step < maxLength; step++) {
+                const nextMap = markovModel.get(state);
+                if (!nextMap) break;
+                // Escolhe próximo caractere baseado na distribuição de probabilidade
+                const rand = Math.random();
+                let accum = 0;
+                let chosen = null;
+                for (let [ch, prob] of nextMap.entries()) {
+                    accum += prob;
+                    if (rand < accum) {
+                        chosen = ch;
+                        break;
+                    }
+                }
+                if (chosen === '$' || chosen === null) break;
+                result += chosen;
+                state = state.slice(1) + chosen;
+            }
+            if (result.length < 4) return "senha" + Math.floor(Math.random() * 1000); // fallback
+            return result;
+        }
+
+        // Gera N senhas
+        function generatePasswords(n, maxLen) {
+            const passwords = new Set();
+            while (passwords.size < n) {
+                let pwd = generatePasswordFromMarkov(maxLen);
+                if (pwd.length >= 6) passwords.add(pwd);
+            }
+            return Array.from(passwords);
+        }
+
+        // ----------------------------- SIMULAÇÃO DE REDES E AUDITORIA -----------------------------
+        let currentNetworks = [];
+        
+        // Gerar redes aleatórias (simulando escaneamento)
+        function generateRandomNetworks() {
+            const ssids = ["Home_WiFi", "Cafeteria_Livre", "Corp_Secure", "Roteador_Antigo", "Vizinho_2G", "Fibertel_5G", "Guest_Access", "IoT_Network"];
+            const securities = ["WPA2-PSK", "ABERTA", "WPA3-Enterprise", "WEP (Vulnerável)", "WPA2-PSK", "ABERTA", "WPA2-PSK", "WPA2-PSK"];
+            const bssids = Array(8).fill().map(() => Math.random().toString(16).substr(2, 10).match(/.{1,2}/g).join(':').toUpperCase());
+            const signals = [92, 74, 45, 18, 68, 81, 55, 33];
+            return ssids.map((ssid, idx) => ({
+                ssid: ssid + (idx === 0 ? "_2G" : idx === 1 ? "_Publica" : ""),
+                bssid: bssids[idx],
+                signal: signals[idx % signals.length],
+                security: securities[idx % securities.length],
+                password: (idx === 0) ? "senha123" : (idx === 1) ? "" : (idx === 2) ? "Corp@2024" : (idx === 3) ? "12345" : "wifi"+Math.floor(Math.random()*9000+1000)
+            }));
+        }
+
+        function updateUIWithNetworks(networks) {
+            const tbody = document.getElementById('networksTableBody');
+            tbody.innerHTML = '';
+            const select = document.getElementById('targetNetworkSelect');
+            select.innerHTML = '<option value="">-- Selecione uma rede --</option>';
+            networks.forEach((net, i) => {
+                const row = tbody.insertRow();
+                row.className = 'hover:bg-gray-850 transition';
+                row.insertCell(0).innerHTML = `<span class="font-sans font-medium text-gray-200">${net.ssid}</span>`;
+                row.insertCell(1).innerHTML = `<span class="text-gray-400 font-mono text-xs">${net.bssid}</span>`;
+                let signalColor = net.signal >= 70 ? 'text-emerald-400' : (net.signal >= 40 ? 'text-amber-500' : 'text-red-500');
+                row.insertCell(2).innerHTML = `<span class="${signalColor} font-mono">${net.signal}%</span>`;
+                let secClass = net.security.includes('ABERTA') ? 'bg-emerald-950 text-emerald-400' : (net.security.includes('WEP') ? 'bg-amber-950 text-amber-400' : 'bg-gray-800 text-gray-300');
+                row.insertCell(3).innerHTML = `<span class="${secClass} text-xs px-2 py-0.5 rounded border border-gray-700">${net.security}</span>`;
+                const btn = document.createElement('button');
+                btn.textContent = 'Atacar';
+                btn.className = 'bg-red-800 hover:bg-red-700 px-2 py-1 rounded text-xs';
+                btn.onclick = () => selectNetworkForAttack(net.ssid);
+                row.insertCell(4).appendChild(btn);
+                
+                const option = document.createElement('option');
+                option.value = net.ssid;
+                option.textContent = `${net.ssid} (${net.security})`;
+                select.appendChild(option);
+            });
+            // Atualizar cards estatísticos
+            document.getElementById('stats-area').innerHTML = `
+                <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between"><div><p class="text-xs text-gray-400">Redes ao Alcance</p><h3 class="text-2xl font-bold font-mono">${networks.length}</h3></div><div class="text-blue-500 bg-blue-950/50 p-3 rounded-lg"><i data-lucide="wifi"></i></div></div>
+                <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between"><div><p class="text-xs text-gray-400">Dispositivos Conectados</p><h3 class="text-2xl font-bold font-mono">${Math.floor(Math.random() * 15 + 5)}</h3></div><div class="text-purple-500 bg-purple-950/50 p-3 rounded-lg"><i data-lucide="laptop"></i></div></div>
+                <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between"><div><p class="text-xs text-gray-400">Pacotes Injetados /s</p><h3 class="text-2xl font-bold font-mono">${Math.floor(Math.random() * 500 + 200)}</h3></div><div class="text-emerald-500 bg-emerald-950/50 p-3 rounded-lg"><i data-lucide="activity"></i></div></div>
+                <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex items-center justify-between"><div><p class="text-xs text-gray-400">Alertas de Vulnerabilidade</p><h3 class="text-2xl font-bold text-amber-500">${networks.filter(n => n.security.includes('WEP') || n.security.includes('ABERTA')).length}</h3></div><div class="text-amber-500 bg-amber-950/50 p-3 rounded-lg"><i data-lucide="alert-triangle"></i></div></div>
+            `;
+            lucide.createIcons();
+        }
+
+        function addLog(message, type = 'info') {
+            const logDiv = document.getElementById('terminalLog');
+            const timestamp = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+            const color = type === 'error' ? 'text-red-400' : (type === 'success' ? 'text-emerald-400' : 'text-gray-300');
+            const newLine = document.createElement('div');
+            newLine.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> <span class="${color}">${message}</span>`;
+            logDiv.appendChild(newLine);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function selectNetworkForAttack(ssid) {
+            const select = document.getElementById('targetNetworkSelect');
+            select.value = ssid;
+            addLog(`Rede alvo definida: ${ssid}`);
+        }
+
+        let lastGeneratedPasswords = [];
+        
+        document.getElementById('generatePassBtn').addEventListener('click', () => {
+            const n = parseInt(document.getElementById('numPasswords').value) || 10;
+            const maxLen = parseInt(document.getElementById('maxLen').value) || 12;
+            addLog(`Iniciando geração probabilística (Markov ordem 2) de ${n} senhas (max ${maxLen} caracteres)...`);
+            lastGeneratedPasswords = generatePasswords(n, maxLen);
+            const area = document.getElementById('generatedPasswordsArea');
+            const list = document.getElementById('generatedList');
+            list.innerHTML = '';
+            lastGeneratedPasswords.forEach(pwd => {
+                const li = document.createElement('li');
+                li.textContent = pwd;
+                list.appendChild(li);
+            });
+            area.classList.remove('hidden');
+            addLog(`${n} senhas geradas com sucesso.`, 'success');
+        });
+        
+        document.getElementById('attackBtn').addEventListener('click', () => {
+            const targetSSID = document.getElementById('targetNetworkSelect').value;
+            if (!targetSSID) {
+                addLog('ERRO: Selecione uma rede alvo antes de testar senhas.', 'error');
+                return;
+            }
+            const network = currentNetworks.find(n => n.ssid === targetSSID);
+            if (!network) {
+                addLog('Rede não encontrada na tabela atual.', 'error');
+                return;
+            }
+            if (network.security === 'ABERTA') {
+                addLog(`A rede ${targetSSID} é aberta. Não precisa de senha! Conectando...`, 'success');
+                return;
+            }
+            if (lastGeneratedPasswords.length === 0) {
+                addLog('Nenhuma senha gerada. Clique em "Gerar Senhas" primeiro.', 'error');
+                return;
+            }
+            addLog(`Iniciando ataque de dicionário probabilístico contra ${targetSSID}...`);
+            let found = false;
+            for (let i = 0; i < lastGeneratedPasswords.length; i++) {
+                const pwd = lastGeneratedPasswords[i];
+                addLog(`Testando senha: ${pwd}`, 'info');
+                // Simula verificação (caso a rede tenha senha fictícia definida)
+                if (network.password && pwd === network.password) {
+                    addLog(`✅ SENHA ENCONTRADA! A senha da rede ${targetSSID} é: ${pwd}`, 'success');
+                    found = true;
+                    break;
+                }
+                // Pequeno atraso simulado (não bloqueia UI)
+                awaitDelay(50);
+            }
+            if (!found) {
+                addLog(`Falha no ataque. Nenhuma das ${lastGeneratedPasswords.length} senhas geradas funcionou.`, 'error');
+            }
+        });
+        
+        function awaitDelay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        // Escaneamento inicial e botão scan
+        function refreshScan() {
+            addLog("Executando varredura de redes Wi-Fi...");
+            currentNetworks = generateRandomNetworks();
+            updateUIWithNetworks(currentNetworks);
+            addLog(`Varredura concluída. ${currentNetworks.length} redes detectadas.`, 'success');
+        }
+        
+        document.getElementById('scanBtn').addEventListener('click', () => {
+            refreshScan();
+        });
+        
+        refreshScan();
+        
+        // Reaplica ícones após atualizações dinâmicas
+        setInterval(() => lucide.createIcons(), 1000);
     </script>
 </body>
 </html>
